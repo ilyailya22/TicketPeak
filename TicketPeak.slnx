@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Aspire/">
+    <Project Path="src/Aspire/TicketPeak.ServiceDefaults/TicketPeak.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Monolith/">
+    <Project Path="src/Monolith/TicketPeak.Api/TicketPeak.Api.csproj" />
+  </Folder>
+</Solution>
