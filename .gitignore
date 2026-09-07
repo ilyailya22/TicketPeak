@@ -1,0 +1,25 @@
+# Build output
+bin/
+obj/
+build/
+dist/
+out/
+
+# Dependencies
+node_modules/
+packages/
+
+# IDE / editor
+.vs/
+.idea/
+.vscode/
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs & env
+*.log
+.env
+.env.local
