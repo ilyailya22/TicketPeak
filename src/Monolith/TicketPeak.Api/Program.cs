@@ -23,7 +23,7 @@ app.MapGet("/hello", () => Results.Ok(new HelloResponse("TicketPeak")))
 
 app.Run();
 
-internal sealed record HelloResponse(string Service);
+internal    sealed   record HelloResponse( string Service );
 
 /// <summary>Entry point marker so integration tests can reference this host.</summary>
 public partial class Program;
