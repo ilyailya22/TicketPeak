@@ -15,7 +15,9 @@ It is a **modular monolith** (core transactional domain) plus **three deliberate
 
 ### Current phase
 
-> **Phase 0 — Foundation and tooling** (update this line when a phase is merged)
+> **Phase 1 — Domain model and monolith skeleton** (update this line when a phase is merged)
+>
+> Phase 0 is complete: see [PR #1](https://github.com/ilyailya22/TicketPeak/pull/1) and ADRs 0001–0003.
 
 Work only on the current phase. Do not scaffold things belonging to later phases "while we're here."
 

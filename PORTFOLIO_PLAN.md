@@ -682,7 +682,7 @@ Write each of these out in `docs/talking-points.md` as you build. These are the 
 
 | Phase | Branch | Status | PR | ADRs written |
 |---|---|---|---|---|
-| 0 Foundation | `phase-00-foundation` | ☐ | | 0001, 0002 |
+| 0 Foundation | `phase-00-foundation` | ✅ | [#1](https://github.com/ilyailya22/TicketPeak/pull/1) | 0001, 0002, 0003 |
 | 1 Modular monolith | `phase-01-modular-monolith` | ☐ | | 0004, 0005, 0006 |
 | 2 SQL persistence | `phase-02-sql-persistence` | ☐ | | |
 | 3 Auth | `phase-03-auth` | ☐ | | |
