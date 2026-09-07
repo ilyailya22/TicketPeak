@@ -7,4 +7,7 @@
   <Folder Name="/src/Monolith/">
     <Project Path="src/Monolith/TicketPeak.Api/TicketPeak.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TicketPeak.Api.Tests/TicketPeak.Api.Tests.csproj" />
+  </Folder>
 </Solution>

@@ -1,0 +1,13 @@
+<Project>
+
+  <!-- Chain to the repository root so test projects keep the shared settings. -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!-- xUnit v3 test projects are self-executing hosts, not class libraries. -->
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+</Project>

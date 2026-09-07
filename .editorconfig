@@ -100,5 +100,8 @@ dotnet_naming_symbols.constants.required_modifiers = const
 dotnet_diagnostic.IDE0055.severity = silent
 
 [tests/**/*.cs]
-# Test method names follow MethodOrScenario_Condition_ExpectedResult, which the
-# PascalCase rule would otherwise be happy with anyway. Keep the rest identical.
+
+# CLAUDE.md mandates MethodOrScenario_Condition_ExpectedResult for test names, which is
+# exactly what CA1707 forbids. The convention wins: a test name is documentation read in a
+# failure report, not an API surface anyone calls.
+dotnet_diagnostic.CA1707.severity = none
