@@ -6,12 +6,17 @@
   </PropertyGroup>
 
   <!--
-    Every version in this repository lives here and nowhere else.
-    Licences are recorded in docs/adr/0003-third-party-licensing.md; check one
-    before adding it.
+    Every NuGet version in this repository lives here and nowhere else, so twenty projects
+    cannot drift apart. Check a package's licence before adding it and record the decision in
+    docs/adr/0003-third-party-licensing.md.
+
+    Two deliberate exceptions, both unavoidable:
+      - MSBuild SDK versions (Aspire.AppHost.Sdk) cannot be expressed as a PackageVersion.
+        They are pinned in global.json under "msbuild-sdks".
+      - Aspire.Hosting.AppHost is an implicit PackageReference added by Aspire.AppHost.Sdk.
+        Listing it here fails restore with NU1009; its version follows the SDK.
   -->
   <ItemGroup Label="Aspire">
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.5.3" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.8.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.8.0" />
   </ItemGroup>
