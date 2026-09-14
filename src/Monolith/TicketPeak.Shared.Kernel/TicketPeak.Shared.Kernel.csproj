@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The kernel is referenced by every module's Domain layer, so it references nothing but the
+    BCL. An architecture test enforces this; adding a PackageReference here fails the build.
+  -->
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TicketPeak.UnitTests" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Domain invariants only: no containers, no network, no database. The fast inner loop. -->
+
+  <ItemGroup>
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Shared.Kernel\TicketPeak.Shared.Kernel.csproj" />
+  </ItemGroup>
+
+</Project>
