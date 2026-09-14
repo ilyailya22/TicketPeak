@@ -6,10 +6,16 @@
   </Folder>
   <Folder Name="/src/Monolith/">
     <Project Path="src/Monolith/TicketPeak.Api/TicketPeak.Api.csproj" />
+    <Project Path="src/Monolith/TicketPeak.Modules.Catalog/TicketPeak.Modules.Catalog.csproj" />
+    <Project Path="src/Monolith/TicketPeak.Modules.Identity/TicketPeak.Modules.Identity.csproj" />
+    <Project Path="src/Monolith/TicketPeak.Modules.Inventory/TicketPeak.Modules.Inventory.csproj" />
+    <Project Path="src/Monolith/TicketPeak.Modules.Ordering/TicketPeak.Modules.Ordering.csproj" />
+    <Project Path="src/Monolith/TicketPeak.Modules.Payments/TicketPeak.Modules.Payments.csproj" />
     <Project Path="src/Monolith/TicketPeak.Shared.Kernel/TicketPeak.Shared.Kernel.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TicketPeak.Api.Tests/TicketPeak.Api.Tests.csproj" />
+    <Project Path="tests/TicketPeak.ArchitectureTests/TicketPeak.ArchitectureTests.csproj" />
     <Project Path="tests/TicketPeak.UnitTests/TicketPeak.UnitTests.csproj" />
   </Folder>
 </Solution>

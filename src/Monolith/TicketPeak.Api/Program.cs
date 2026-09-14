@@ -1,9 +1,31 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
+using TicketPeak.Api.Composition;
+using TicketPeak.Modules.Catalog;
+using TicketPeak.Modules.Identity;
+using TicketPeak.Modules.Inventory;
+using TicketPeak.Modules.Ordering;
+using TicketPeak.Modules.Payments;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
+
+// Autofac is the container for the monolith: one Autofac.Module per bounded context, assembly
+// scanning and decorators. The services extracted later use the built-in container. See ADR 0006.
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    container.RegisterModule<MediatorModule>();
+
+    container.RegisterModule<IdentityModule>();
+    container.RegisterModule<CatalogModule>();
+    container.RegisterModule<InventoryModule>();
+    container.RegisterModule<OrderingModule>();
+    container.RegisterModule<PaymentsModule>();
+});
 
 WebApplication app = builder.Build();
 
@@ -15,8 +37,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-// Phase 0 placeholder: proves the host boots, the pipeline runs and telemetry reaches the
-// Aspire dashboard. The first real endpoints arrive with the Catalog module in Phase 1.
+// Phase 0 placeholder, kept until the first real endpoints land in step 7 of Phase 1.
 app.MapGet("/hello", () => Results.Ok(new HelloResponse("TicketPeak")))
    .WithName("Hello")
    .WithSummary("Liveness smoke endpoint used by the Phase 0 acceptance test.");

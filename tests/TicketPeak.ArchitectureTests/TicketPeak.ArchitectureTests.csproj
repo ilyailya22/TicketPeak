@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Module boundaries are enforced here, not by discipline. The monorepo (ADR 0002) places no
+    structural barrier between modules, which is what makes these tests load-bearing.
+  -->
+
+  <ItemGroup>
+    <PackageReference Include="TngTech.ArchUnitNET.xUnitV3" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Shared.Kernel\TicketPeak.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Catalog\TicketPeak.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Identity\TicketPeak.Modules.Identity.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Inventory\TicketPeak.Modules.Inventory.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Ordering\TicketPeak.Modules.Ordering.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Payments\TicketPeak.Modules.Payments.csproj" />
+  </ItemGroup>
+
+</Project>
