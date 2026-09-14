@@ -1,0 +1,14 @@
+@TicketPeak.Api_HostAddress = http://localhost:5206
+
+GET {{TicketPeak.Api_HostAddress}}/hello
+Accept: application/json
+
+###
+
+GET {{TicketPeak.Api_HostAddress}}/health/live
+
+###
+
+GET {{TicketPeak.Api_HostAddress}}/health/ready
+
+###

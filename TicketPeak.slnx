@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Aspire/">
+    <Project Path="src/Aspire/TicketPeak.AppHost/TicketPeak.AppHost.csproj" />
+    <Project Path="src/Aspire/TicketPeak.ServiceDefaults/TicketPeak.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Monolith/">
+    <Project Path="src/Monolith/TicketPeak.Api/TicketPeak.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TicketPeak.Api.Tests/TicketPeak.Api.Tests.csproj" />
+  </Folder>
+</Solution>

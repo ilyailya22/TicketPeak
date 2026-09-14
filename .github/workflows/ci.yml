@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A superseded run tells you nothing. Cancel it and keep the queue honest.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  build:
+    name: build · test · format
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # The SDK version comes from global.json, so CI and developer machines cannot
+      # drift apart without the drift being a reviewable change.
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/Directory.Packages.props', '**/global.json') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore TicketPeak.slnx
+
+      - name: Build
+        run: dotnet build TicketPeak.slnx --no-restore --configuration Release
+
+      # Under Microsoft.Testing.Platform a solution must be passed with --solution;
+      # `dotnet test <solution>` positionally is rejected.
+      - name: Test
+        run: dotnet test --solution TicketPeak.slnx --no-build --configuration Release
+
+      # Last, because a formatting nit is the least interesting reason to fail and
+      # should not mask a real build or test failure.
+      - name: Verify formatting
+        run: dotnet format TicketPeak.slnx --verify-no-changes --no-restore

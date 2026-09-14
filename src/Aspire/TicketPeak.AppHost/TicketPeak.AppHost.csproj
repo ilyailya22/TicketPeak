@@ -1,0 +1,13 @@
+<Project Sdk="Aspire.AppHost.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+    <UserSecretsId>be9aaccb-9eb4-4eff-866a-710868ba1aad</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Monolith\TicketPeak.Api\TicketPeak.Api.csproj" />
+  </ItemGroup>
+
+</Project>

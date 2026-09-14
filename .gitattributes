@@ -1,0 +1,20 @@
+# Normalise line endings to LF in the repository *and* in the working tree, on every
+# platform. `core.autocrlf` is a per-machine setting and this repo is checked out on
+# Windows locally and Linux in CI; without this, `dotnet format --verify-no-changes`
+# passes in one place and fails in the other.
+* text=auto eol=lf
+
+# Windows-only tooling that genuinely requires CRLF.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary — never touch.
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.pdf  binary
+*.snk  binary
+*.ttf  binary
+*.woff binary
+*.woff2 binary
