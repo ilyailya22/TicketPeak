@@ -1,12 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" />
+    <PackageReference Include="FluentValidation" />
     <PackageReference Include="MediatR" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TicketPeak.Shared.Kernel\TicketPeak.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Catalog\TicketPeak.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Inventory\TicketPeak.Modules.Inventory.csproj" />
   </ItemGroup>
 
   <ItemGroup>

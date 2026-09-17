@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
 using TicketPeak.Api.Composition;
+using TicketPeak.Api.Http;
 using TicketPeak.Modules.Catalog;
 using TicketPeak.Modules.Identity;
 using TicketPeak.Modules.Inventory;
@@ -39,14 +40,14 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-// Phase 0 placeholder, kept until the first real endpoints land in step 7 of Phase 1.
-app.MapGet("/hello", () => Results.Ok(new HelloResponse("TicketPeak")))
-   .WithName("Hello")
-   .WithSummary("Liveness smoke endpoint used by the Phase 0 acceptance test.");
+// Every module endpoint returns a Result. This one filter turns Results into HTTP responses, so
+// the mapping from ErrorType to status code exists exactly once.
+RouteGroupBuilder api = app.MapGroup("/api").AddEndpointFilter<ResultEndpointFilter>();
+api.MapCatalogEndpoints();
+api.MapInventoryEndpoints();
+api.MapOrderingEndpoints();
 
 app.Run();
-
-internal sealed record HelloResponse(string Service);
 
 /// <summary>Entry point marker so integration tests can reference this host.</summary>
 public partial class Program;

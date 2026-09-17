@@ -1,7 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" />
+    <PackageReference Include="FluentValidation" />
     <PackageReference Include="MediatR" />
   </ItemGroup>
 
