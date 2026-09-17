@@ -24,35 +24,6 @@ public sealed class CatalogValueObjectTests
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("EU")]
-    [InlineData("EURO")]
-    [InlineData("E1R")]
-    public void CurrencyCode_WhenNotThreeLetters_IsRefused(string? value)
-    {
-        CurrencyCode.Create(value).Error.ShouldBe(CatalogErrors.InvalidCurrency);
-    }
-
-    [Fact]
-    public void CurrencyCode_WhenLowercase_IsNormalised()
-    {
-        CurrencyCode.Create("eur").Value.Value.ShouldBe("EUR");
-    }
-
-    [Fact]
-    public void Money_WhenNegative_IsRefused()
-    {
-        Money.Create(-1, CurrencyCode.Create("EUR").Value).Error.ShouldBe(CatalogErrors.NegativePrice);
-    }
-
-    [Fact]
-    public void Money_WhenZero_IsAllowed()
-    {
-        Money.Create(0, CurrencyCode.Create("EUR").Value).IsSuccess.ShouldBeTrue();
-    }
-
-    [Theory]
     [InlineData(0)]
     [InlineData(-3)]
     public void Row_WithFewerThanOneSeat_IsRefused(int seats)

@@ -1,4 +1,5 @@
 using TicketPeak.Modules.Catalog.Domain;
+using TicketPeak.Shared.Kernel;
 
 namespace TicketPeak.UnitTests.Catalog;
 

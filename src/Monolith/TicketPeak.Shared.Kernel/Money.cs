@@ -1,12 +1,11 @@
-using TicketPeak.Shared.Kernel;
-
-namespace TicketPeak.Modules.Catalog.Domain;
+namespace TicketPeak.Shared.Kernel;
 
 /// <summary>
 /// An amount in the currency's minor unit (cents, pence), so no price is ever a rounded
-/// floating-point number.
+/// floating-point number. Shared because Catalog prices, Ordering totals and Payments amounts must
+/// mean exactly the same thing; three copies would be three chances to disagree.
 /// </summary>
-internal readonly record struct Money
+public readonly record struct Money
 {
     private Money(long amountMinor, CurrencyCode currency)
     {
@@ -22,7 +21,7 @@ internal readonly record struct Money
     {
         if (amountMinor < 0)
         {
-            return CatalogErrors.NegativePrice;
+            return MoneyErrors.Negative;
         }
 
         return new Money(amountMinor, currency);

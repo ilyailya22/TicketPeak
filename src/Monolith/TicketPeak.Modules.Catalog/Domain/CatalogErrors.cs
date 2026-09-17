@@ -8,12 +8,6 @@ internal static class CatalogErrors
     public static Error InvalidSectionCode { get; } =
         Error.Validation("Catalog.SectionCode.Invalid", "A section code must be 1 to 20 characters.");
 
-    public static Error InvalidCurrency { get; } =
-        Error.Validation("Catalog.Currency.Invalid", "A currency must be a three-letter ISO 4217 code.");
-
-    public static Error NegativePrice { get; } =
-        Error.Validation("Catalog.Price.Negative", "A price cannot be negative.");
-
     public static Error RowLabelRequired { get; } =
         Error.Validation("Catalog.Row.LabelRequired", "A row needs a label.");
 
