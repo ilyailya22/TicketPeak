@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Monolith\TicketPeak.Shared.Kernel\TicketPeak.Shared.Kernel.csproj" />
     <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Catalog\TicketPeak.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Inventory\TicketPeak.Modules.Inventory.csproj" />
   </ItemGroup>
 
 </Project>
