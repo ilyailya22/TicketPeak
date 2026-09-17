@@ -39,6 +39,7 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="11.0.2" />
     <!-- 12.5.0 is the last Apache-2.0 release; 13.0.0+ is RPL-1.5 or commercial. Do not bump. See ADR 0005. -->
     <PackageVersion Include="MediatR" Version="12.5.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
   </ItemGroup>
 
   <ItemGroup Label="Testing">

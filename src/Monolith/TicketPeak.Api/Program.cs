@@ -12,6 +12,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton(TimeProvider.System);
 
 // Autofac is the container for the monolith: one Autofac.Module per bounded context, assembly
 // scanning and decorators. The services extracted later use the built-in container. See ADR 0006.
@@ -19,6 +20,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
     container.RegisterModule<MediatorModule>();
+    container.RegisterModule<PipelineModule>();
 
     container.RegisterModule<IdentityModule>();
     container.RegisterModule<CatalogModule>();
