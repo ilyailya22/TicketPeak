@@ -16,7 +16,6 @@ public sealed class ModuleBoundaryTests
             .Should().OnlyDependOn(Types().That().ResideInNamespaceMatching(
                 $@"^(System(\..+)?|TicketPeak\.Shared\.Kernel(\..+)?|TicketPeak\.Modules\.{module}\.Domain(\..+)?)$"))
             .Because("the domain model must be testable and reasoned about with no framework or layer in the way")
-            .WithoutRequiringPositiveResults()
             .Check(MonolithArchitecture.Instance);
     }
 
@@ -28,7 +27,6 @@ public sealed class ModuleBoundaryTests
             .Should().NotDependOnAny(Types().That().ResideInNamespaceMatching(
                 $@"^TicketPeak\.Modules\.(?!{module}\.)\w+\.(Domain|Application|Infrastructure|Endpoints)(\..+)?$"))
             .Because("modules talk to each other only through their I<Module>Api, so any one can be extracted without rewriting its neighbours")
-            .WithoutRequiringPositiveResults()
             .Check(MonolithArchitecture.Instance);
     }
 
@@ -38,7 +36,6 @@ public sealed class ModuleBoundaryTests
         Types().That().ResideInNamespaceMatching(@"^TicketPeak\.Modules\.\w+\.(Domain|Application|Infrastructure|Endpoints)(\..+)?$")
             .Should().NotBePublic()
             .Because("only a module's root namespace (its I<Module>Api and composition module) is a public surface")
-            .WithoutRequiringPositiveResults()
             .Check(MonolithArchitecture.Instance);
     }
 }
