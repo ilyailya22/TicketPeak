@@ -15,9 +15,10 @@ It is a **modular monolith** (core transactional domain) plus **three deliberate
 
 ### Current phase
 
-> **Phase 1 — Domain model and monolith skeleton** (update this line when a phase is merged)
+> **Phase 2 — Persistence: MSSQL + EF Core** (update this line when a phase is merged)
 >
-> Phase 0 is complete: see [PR #1](https://github.com/ilyailya22/TicketPeak/pull/1) and ADRs 0001–0003.
+> Phase 1 is complete: see [PR #2](https://github.com/ilyailya22/TicketPeak/pull/2) and ADRs 0004–0006.
+> Phase 0: [PR #1](https://github.com/ilyailya22/TicketPeak/pull/1) and ADRs 0001–0003.
 
 Work only on the current phase. Do not scaffold things belonging to later phases "while we're here."
 
@@ -39,26 +40,27 @@ Work only on the current phase. Do not scaffold things belonging to later phases
 ## 3. Commands
 
 ```bash
-# run everything (SQL, Redis, Mongo, RabbitMQ, all services, dashboard)
-dotnet run --project src/Aspire/TicketPeak.AppHost
+# run everything (dashboard + API today; SQL, Redis, Mongo, RabbitMQ join in later phases)
+aspire run
+dotnet run --project src/Aspire/TicketPeak.AppHost   # same, without the Aspire CLI
 
-# build / test
+# build / test — --solution or --project is required under Microsoft.Testing.Platform
 dotnet build TicketPeak.slnx
-dotnet test                                    # all
-dotnet test tests/TicketPeak.UnitTests         # fast loop, no containers
-dotnet test tests/TicketPeak.ArchitectureTests # boundary rules
+dotnet test --solution TicketPeak.slnx                     # all
+dotnet test --project tests/TicketPeak.UnitTests           # fast loop, no containers
+dotnet test --project tests/TicketPeak.ArchitectureTests   # boundary rules
 
 # formatting — CI fails if this is not clean
-dotnet format --verify-no-changes
+dotnet format TicketPeak.slnx --verify-no-changes
 
-# migrations (per module, each has its own DbContext + history table)
+# migrations (from Phase 2: per module, each has its own DbContext + history table)
 dotnet ef migrations add <Name> \
   --project src/Monolith/TicketPeak.Modules.<Module> \
   --startup-project src/Monolith/TicketPeak.Api \
   --context <Module>DbContext
 ```
 
-Integration tests use **Testcontainers** — Docker must be running. They are slower; run unit tests during the inner loop.
+Integration tests use **Testcontainers** from Phase 2 — Docker must be running. They are slower; run unit tests during the inner loop.
 
 ---
 
@@ -79,20 +81,21 @@ docs/adr/            Architecture decision records
 
 ```
 TicketPeak.Modules.Ordering/
-├─ Domain/            aggregates, value objects, domain events — references NOTHING
-├─ Application/       one folder per use case: Command + Handler + Validator + Response
-├─ Infrastructure/    DbContext, EF configurations, repositories, external clients
-├─ Endpoints/         minimal API endpoint group
-├─ OrderingModule.cs  Autofac module + registration
-└─ IOrderingApi.cs    the ONLY public type other modules may reference
+├─ Domain/              aggregates, value objects, domain events, repository interfaces
+├─ Application/         one folder per use case: Command + Handler + Validator + Response
+├─ Infrastructure/      persistence and external clients (in-memory in Phase 1, EF Core from Phase 2)
+├─ Endpoints/           request bodies whose other half comes from the route
+├─ OrderingModule.cs    Autofac module — the host registers this and nothing else
+├─ OrderingEndpoints.cs maps the module's routes; endpoints return Results, the host maps them to HTTP
+└─ IOrderingApi.cs      what other modules may call, with the records it returns
 ```
 
-**Boundary rules (enforced by architecture tests, not by discipline):**
-- `Domain` has no project references and no framework dependencies beyond BCL.
-- A module may reference another module **only** through its `I<Module>Api` interface.
-- Everything else in a module is `internal`.
-- No module references `TicketPeak.Api`.
-- Cross-module *state changes* go through integration events, not direct calls.
+**Boundary rules (enforced by architecture tests, not by discipline — see ADR 0004):**
+- `Domain` depends only on the BCL, `Shared.Kernel` and its own module's Domain. `Shared.Kernel` depends only on the BCL.
+- A module may depend on another module **only** through that module's root namespace (`I<Module>Api` and the records it returns), never its Domain, Application, Infrastructure or Endpoints.
+- Types in those four layer namespaces are `internal`; only the root namespace is public.
+- No module references `TicketPeak.Api`. That would be a circular project reference, so MSBuild enforces it.
+- **Inside the checkout consistency boundary** (Catalog, Inventory, Ordering, Payments), modules call each other synchronously through `I<Module>Api`. **Everything outside it** goes through integration events from Phase 6.
 
 ---
 
@@ -101,20 +104,20 @@ TicketPeak.Modules.Ordering/
 | Area | Choice | Notes |
 |---|---|---|
 | Runtime | .NET 10 (LTS), C# 14 | `nullable` and `TreatWarningsAsErrors` on everywhere |
-| Packages | Central Package Management | versions live **only** in `Directory.Packages.props` |
-| API | Minimal APIs in services; Controllers in the monolith where filters/model binding earn it | |
+| Packages | Central Package Management | NuGet versions live **only** in `Directory.Packages.props`; MSBuild SDK versions in `global.json` |
+| API | Minimal APIs | module endpoints return `Result`; one host endpoint filter maps it to 200/204 or RFC 9457 problems |
 | Docs | `Microsoft.AspNetCore.OpenApi` + Scalar | not Swashbuckle |
 | DI | **Autofac** in the monolith, **MS.DI** in the services | deliberate contrast — see ADR 0006 |
-| Mediator | **MediatR** in the monolith only | services use plain handlers — see ADR 0005 |
-| ORM | EF Core 10; **Dapper** for hot read paths | mark each Dapper query with a comment saying why |
+| Mediator | **MediatR 12.5.0**, pinned, in the monolith only | last Apache-2.0 release — **never bump**; services use plain handlers — see ADR 0005 |
+| ORM | EF Core 10; **Dapper** for hot read paths | from Phase 2; mark each Dapper query with a comment saying why |
 | Mapping | **Mapperly** (source-generated) | not AutoMapper |
-| Validation | FluentValidation, invoked by a MediatR behaviour | |
-| Messaging | MassTransit over RabbitMQ (Azure Service Bus in cloud, swapped by config) | |
+| Validation | FluentValidation, invoked by a MediatR behaviour | shape only; aggregates still guard their own rules |
+| Messaging | MassTransit over RabbitMQ (Azure Service Bus in cloud, swapped by config) | from Phase 6 |
 | Caching | HybridCache (L1 memory + L2 Redis) | explicit invalidation on write |
 | Resilience | `Microsoft.Extensions.Resilience` / Polly v8 pipelines | on every outbound HTTP call |
-| Logging | Serilog, structured, JSON to console | |
+| Logging | `[LoggerMessage]` source generation now; Serilog, structured, JSON to console from Phase 5 | CA1848 is enforced |
 | Telemetry | OpenTelemetry traces + metrics + logs | wired in ServiceDefaults |
-| Tests | xUnit v3, NSubstitute, Shouldly, Testcontainers, NetArchTest | |
+| Tests | xUnit v3 on Microsoft.Testing.Platform, Shouldly, FakeTimeProvider, ArchUnitNET; Testcontainers from Phase 2 | NetArchTest rejected as unmaintained — see ADR 0003 |
 
 **Licensing:** several of these re-licensed in 2025 (MediatR, AutoMapper, MassTransit v9, FluentAssertions v8). Before adding one, check the licence of the exact version being pinned and record it in `docs/adr/0003-third-party-licensing.md`.
 
@@ -122,13 +125,13 @@ TicketPeak.Modules.Ordering/
 
 ## 6. Code conventions
 
-- **`TimeProvider`, never `DateTime.Now`/`UtcNow`.** Inject it; tests use `FakeTimeProvider`.
-- **Strongly-typed IDs**: `readonly record struct OrderId(Guid Value)` with EF Core value converters.
+- **`TimeProvider`, never `DateTime.Now`/`UtcNow`.** Inject it; tests use `FakeTimeProvider`. Generate ids with `Guid.CreateVersion7(time.GetUtcNow())`.
+- **Strongly-typed IDs**: `readonly record struct OrderId(Guid Value)` with EF Core value converters. Each module owns its own id types.
 - **`Result<T>` for expected failures**; exceptions only for genuinely exceptional cases. Never use exceptions for control flow.
-- **RFC 9457 `ProblemDetails`** at the API edge, including the trace id.
+- **RFC 9457 `ProblemDetails`** at the API edge, including the trace id (from Phase 5).
 - **Aggregates protect their invariants.** No public setters on entities; state changes go through methods that can refuse.
 - **No repository interface per entity** — one per aggregate root.
-- `async`/`await` all the way down; pass `CancellationToken` through every layer; never `.Result` or `.Wait()`.
+- `async`/`await` all the way down; pass `CancellationToken` through every layer — including MediatR's `next(cancellationToken)`; never `.Result` or `.Wait()`.
 - `sealed` by default; `record` for DTOs and events; `readonly record struct` for value objects.
 - Files: one public type per file, named after the type.
 - Comments explain **why**, never what. No commented-out code, no `// TODO` without an issue reference.
@@ -145,6 +148,7 @@ TicketPeak.Modules.Ordering/
 - Test names: `MethodOrScenario_Condition_ExpectedResult`.
 - Arrange/Act/Assert, no logic in tests, no shared mutable state between tests.
 - Do not chase a coverage number; cover behaviour that would embarrass you in production if broken.
+- A test run after a failed build uses stale binaries and proves nothing — gate test runs on the build's exit code.
 
 ---
 
