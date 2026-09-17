@@ -1,12 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Aspire\TicketPeak.ServiceDefaults\TicketPeak.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Catalog\TicketPeak.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Identity\TicketPeak.Modules.Identity.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Inventory\TicketPeak.Modules.Inventory.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Ordering\TicketPeak.Modules.Ordering.csproj" />
+    <ProjectReference Include="..\TicketPeak.Modules.Payments\TicketPeak.Modules.Payments.csproj" />
   </ItemGroup>
 
   <ItemGroup>

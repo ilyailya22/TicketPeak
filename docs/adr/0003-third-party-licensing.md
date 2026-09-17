@@ -77,11 +77,37 @@ NuGet cache on 2026-09-07.
 
 All permissive. Nothing in Phase 0 required a compromise.
 
+### Added in Phase 1
+
+Verified between 2026-09-14 and 2026-09-17 from each package's `.nuspec` on nuget.org, and for
+MediatR's later versions from the `LICENSE.md` shipped inside the 14.2.0 package itself. The table
+is a register that grows with each phase; the decision above is unchanged.
+
+| Package | Version | Licence |
+|---|---|---|
+| Autofac | 9.3.2 | MIT |
+| Autofac.Extensions.DependencyInjection | 11.0.2 | MIT |
+| FluentValidation | 12.1.1 | Apache-2.0 |
+| MediatR | **12.5.0**, pinned | Apache-2.0 |
+| MediatR.Contracts (transitive) | 2.0.1 | Apache-2.0 |
+| Microsoft.Extensions.TimeProvider.Testing | 10.10.0 | MIT |
+| TngTech.ArchUnitNET.xUnitV3 | 0.13.4 | Apache-2.0 |
+| TngTech.ArchUnitNET (transitive) | 0.13.4 | Apache-2.0 |
+| CycleDetection (transitive) | 2.0.0 | MIT |
+| JetBrains.Annotations (transitive) | 2026.2.0 | MIT |
+| Mono.Cecil (transitive) | 0.11.6 | MIT |
+| Newtonsoft.Json (transitive) | 13.0.4 | MIT |
+| System.ValueTuple (transitive) | 4.6.2 | MIT |
+
+One compromise: MediatR is frozen at its last permissive release, so it will receive no fixes.
+NuGet audit failing the build is the safety net, and ADR 0005 records the exit plan.
+
 ## Decisions deferred to the phase that needs them
 
 | Package | Phase | Question to answer then |
 |---|---|---|
-| MediatR | 1 | Licence of the version pinned; if commercial, pin the last permissive version or hand-roll the dispatcher — and say which in ADR 0005 |
+| MediatR | 1 | **Resolved.** 13.0.0 onward is RPL-1.5 or commercial; 12.5.0, the last Apache-2.0 release, is pinned. See ADR 0005 |
+| NetArchTest.Rules | 1 | **Rejected.** No release since May 2021 and no licence expression in its package, so it fails this ADR's own first step. ArchUnitNET (Apache-2.0) is used instead. See ADR 0004 |
 | MassTransit | 6 | v9 licence terms; alternatives are Rebus, Wolverine, or raw `RabbitMQ.Client` |
 | AutoMapper | — | Already avoided. Mapperly (source-generated) is chosen for performance reasons independent of licensing |
 | FluentAssertions | — | Already avoided. Shouldly (BSD-3-Clause) is the assertion library |

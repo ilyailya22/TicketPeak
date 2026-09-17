@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Every module's Domain layer references the kernel, so the kernel references nothing but the
+    BCL. The architecture tests fail if any type in it depends on a non-BCL type.
+  -->
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TicketPeak.UnitTests" />
+  </ItemGroup>
+
+</Project>

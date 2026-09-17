@@ -63,8 +63,8 @@ csharp_prefer_braces = true:warning
 #### Analyzer rules deliberately turned off ####
 
 dotnet_diagnostic.CA2007.severity = none      # ConfigureAwait(false) — not used in app code
-dotnet_diagnostic.CA1848.severity = none      # LoggerMessage source-gen — revisit in Phase 5
 dotnet_diagnostic.CA1062.severity = none      # nullable reference types cover this
+dotnet_diagnostic.CA1716.severity = none      # clashes with VB keywords (Shared, Error); C#-only app — the §11 library re-enables it
 
 #### Naming ####
 
