@@ -11,7 +11,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Monolith\TicketPeak.Shared.Kernel\TicketPeak.Shared.Kernel.csproj" />
     <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Catalog\TicketPeak.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Identity\TicketPeak.Modules.Identity.csproj" />
     <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Inventory\TicketPeak.Modules.Inventory.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Ordering\TicketPeak.Modules.Ordering.csproj" />
+    <ProjectReference Include="..\..\src\Monolith\TicketPeak.Modules.Payments\TicketPeak.Modules.Payments.csproj" />
   </ItemGroup>
 
 </Project>
